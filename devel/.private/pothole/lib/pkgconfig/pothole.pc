@@ -1,0 +1,8 @@
+prefix=/home/yeongsoo/HostWorkspace/pothole/devel/.private/pothole
+
+Name: pothole
+Description: Description of pothole
+Version: 0.0.0
+Cflags: -I/home/yeongsoo/HostWorkspace/pothole/src/pothole/include
+Libs: -L${prefix}/lib -lpothole
+Requires: pcl_conversions pcl_ros roscpp sensor_msgs
