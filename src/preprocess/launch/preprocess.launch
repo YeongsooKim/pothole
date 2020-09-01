@@ -19,6 +19,6 @@
 		<param name="z_max" value="$(arg z_max)"/>
 		<param name="z_min" value="$(arg z_min)"/>
 	</node>
-	<node type="rviz" name="rviz" pkg="rviz" args="-d $(find pothole)/rviz/pothole.rviz" />
+	<node type="rviz" name="rviz" pkg="rviz" args="-d $(find preprocess)/rviz/pothole.rviz" />
 </launch>
 

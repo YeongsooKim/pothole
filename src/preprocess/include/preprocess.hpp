@@ -12,7 +12,9 @@ public:
     void Run();
 
     inline void SetPreprocessCloud(pPointCloudXYZ pPointCloud) { m_preprocessCloud.swap(*pPointCloud);}
+    inline void SetRawCloud(pPointCloudXYZ pPointCloud) { m_rawCloud.swap(*pPointCloud);}
 	inline pPointCloudXYZ GetPreprocessCloud(void) { pPointCloudXYZ pPointCloud(new PointCloudXYZ(m_preprocessCloud)); return pPointCloud;}
+	inline pPointCloudXYZ GetRawCloud(void) { pPointCloudXYZ pPointCloud(new PointCloudXYZ(m_rawCloud)); return pPointCloud;}
 private:
     // Node Handler
 	ros::NodeHandle m_nodeHandler;
@@ -21,6 +23,7 @@ private:
 	ros::Subscriber m_subVelodyne;
 
 	// publisher
+    ros::Publisher m_pubRawCloud;
 	ros::Publisher m_pubPreprocessCloud;
 
     // Param
@@ -36,6 +39,7 @@ private:
 
     // PointCloud
 	PointCloudXYZ m_preprocessCloud;
+	PointCloudXYZ m_rawCloud;
 
 private:
     // Common function 

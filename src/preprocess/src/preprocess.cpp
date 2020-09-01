@@ -7,9 +7,11 @@ Preprocess::Preprocess()
 
 	// publisher init
     m_pubPreprocessCloud = m_nodeHandler.advertise<sensor_msgs::PointCloud2>("/pothole/preprocess_cloud", 1000);
+    m_pubRawCloud = m_nodeHandler.advertise<sensor_msgs::PointCloud2>("/pothole/raw_cloud", 1000);
 
     SetParam();
 	m_preprocessCloud.header.frame_id = m_strFrameName;
+	m_rawCloud.header.frame_id = m_strFrameName;
 }
 Preprocess::~Preprocess()
 {
@@ -42,11 +44,14 @@ void Preprocess::VelodyneCallback(const sensor_msgs::PointCloud2::ConstPtr& pInp
     // Container for input data 
 	PointCloudXYZ tmpCloud;
 	pcl::fromROSMsg(*pInput, tmpCloud);
-	pPointCloudXYZ pTempCloud (new PointCloudXYZ(tmpCloud));
+	pPointCloudXYZ pTmpCloud (new PointCloudXYZ(tmpCloud));
+	SetRawCloud(pTmpCloud);
+	// pcl::fromROSMsg(*pInput, *GetRawCloud());
 
     // Thresholding
 	pPointCloudXYZ pPassthroughCloud (new PointCloudXYZ);
-	if (!PassThrough(pTempCloud, pPassthroughCloud)) ROS_ERROR_STREAM("Fail Pass Through");
+	if (!PassThrough(GetRawCloud(), pPassthroughCloud)) ROS_ERROR_STREAM("Fail Pass Through");
+	// if (!PassThrough(pTmpCloud, pPassthroughCloud)) ROS_ERROR_STREAM("Fail Pass Through");
 
 	// Voxelization
 	pPointCloudXYZ pDownsampledCloud (new PointCloudXYZ);
@@ -65,6 +70,7 @@ void Preprocess::VelodyneCallback(const sensor_msgs::PointCloud2::ConstPtr& pInp
 void Preprocess::Publish(void)
 {
     m_pubPreprocessCloud.publish(GetPreprocessCloud());
+	m_pubRawCloud.publish(GetRawCloud());
 }
 
 bool Preprocess::PassThrough(cpPointCloudXYZ& pInputCloud,pPointCloudXYZ& pOutputCloud)
