@@ -1,9 +1,13 @@
 #include <ros/ros.h>
 #include <pcl_ros/point_cloud.h>
 
-#include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/filters/passthrough.h>
+
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl_ros/point_cloud.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/point_types.h>
 
 
 // #include <nav_msgs/Odometry.h>
@@ -39,6 +43,3 @@ using PointCloudNormal = pcl::PointCloud<pcl::Normal>;
 using pPointCloudNormal = PointCloudNormal::Ptr;
 using cPointCloudNormal = const PointCloudNormal;
 using cpPointCloudNormal = const pPointCloudNormal;
-
-using PCLVisualizer = pcl::visualization::PCLVisualizer;
-using pPCLVisualizer = PCLVisualizer::Ptr;

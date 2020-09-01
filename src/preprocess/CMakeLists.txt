@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(pothole)
+project(preprocess)
 
-## Compile as C++11, supported in ROS Kinetic and newer
+## Compile as C++14, supported in ROS Kinetic and newer
  add_compile_options(-std=c++14)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -22,8 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES pothole
-  CATKIN_DEPENDS pcl_conversions pcl_ros roscpp sensor_msgs
+  LIBRARIES preprocess
 #  DEPENDS system_lib
 )
 
@@ -31,6 +30,8 @@ catkin_package(
 ## Build ##
 ###########
 
+ find_package(OpenCV REQUIRED)
+ find_package(PCL 1.7 REQUIRED)
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
@@ -47,9 +48,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME} 
-	#src/ndt.cpp
 	src/preprocess.cpp
-	src/pothole.cpp
 	src/main.cpp
 	)
 

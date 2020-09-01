@@ -6,16 +6,23 @@
 class Preprocess
 {
 public:
-	Preprocess() = default;
-    Preprocess(bool bOnDiscription, std::string strFrameName, double dLeafSize, double dXMax, double dXMin, double dYMax, double dYMin, double dZMax, double dZMin);
-
+	Preprocess();
 	virtual ~Preprocess();
 
-    bool run(cpPointCloudXYZ& pInputCloud);
+    void Run();
 
     inline void SetPreprocessCloud(pPointCloudXYZ pPointCloud) { m_preprocessCloud.swap(*pPointCloud);}
 	inline pPointCloudXYZ GetPreprocessCloud(void) { pPointCloudXYZ pPointCloud(new PointCloudXYZ(m_preprocessCloud)); return pPointCloud;}
 private:
+    // Node Handler
+	ros::NodeHandle m_nodeHandler;
+
+	// subscriber
+	ros::Subscriber m_subVelodyne;
+
+	// publisher
+	ros::Publisher m_pubPreprocessCloud;
+
     // Param
     bool m_bOnDiscription;
     std::string m_strFrameName;
@@ -27,9 +34,16 @@ private:
     double m_dZMax;
     double m_dZMin;
 
-    // Pointcloud
+    // PointCloud
 	PointCloudXYZ m_preprocessCloud;
 
+private:
+    // Common function 
+    void SetParam(void);
+    void VelodyneCallback(const sensor_msgs::PointCloud2::ConstPtr& pInput);
+    void Publish(void);
+
+    // Preprocess function
     bool PassThrough(cpPointCloudXYZ& pInputCloud,pPointCloudXYZ& pOutputCloud);
 	bool Voxelization(cpPointCloudXYZ& pInputCloud,pPointCloudXYZ& pOutputCloud);
 };
