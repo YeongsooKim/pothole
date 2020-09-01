@@ -13,7 +13,7 @@ Pothole::Pothole (void)
 
     SetParam();
 
-	Preprocess preprocess(m_strFixedFrameName, m_dLeafSize_m, m_dXMax, m_dXMin, m_dYMax, m_dYMin, m_dZMax, m_dZMin);
+	Preprocess preprocess(m_bOnDiscription, m_strFixedFrameName, m_dLeafSize_m, m_dXMax, m_dXMin, m_dYMax, m_dYMin, m_dZMax, m_dZMin);
 	m_preprocess = preprocess;
 }
 
@@ -23,6 +23,7 @@ Pothole::~Pothole (void)
 
 void Pothole::SetParam(void)
 {
+	m_nodeHandler.getParam("pothole/on_decription", m_bOnDiscription);
 	m_nodeHandler.getParam("pothole/fixed_frame_name", m_strFixedFrameName);
 	m_nodeHandler.getParam("pothole/voxel_leafsize", m_dLeafSize_m);
 	m_nodeHandler.getParam("pothole/x_max", m_dXMax);
@@ -50,7 +51,11 @@ void Pothole::VelodyneCallback(const sensor_msgs::PointCloud2::ConstPtr& pInput)
 	pcl::fromROSMsg(*pInput, tmpCloud);
 	pPointCloudXYZ pTempCloud (new PointCloudXYZ(tmpCloud));
 
+	ROS_INFO_STREAM("###### 1. Preprocessing ######");
 	if (!m_preprocess.run(pTempCloud)) {ROS_ERROR_STREAM("Fail Preprocessing");}
+	// ROS_INFO_STREAM("###### 2. Preprocessing ######");
+	// ROS_INFO_STREAM("###### 3. Preprocessing ######");
+	// ROS_INFO_STREAM("###### 4. Preprocessing ######");
 
 
     Publish();

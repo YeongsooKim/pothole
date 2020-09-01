@@ -7,7 +7,7 @@ class Preprocess
 {
 public:
 	Preprocess() = default;
-    Preprocess(std::string strFrameName, double dLeafSize, double dXMax, double dXMin, double dYMax, double dYMin, double dZMax, double dZMin);
+    Preprocess(bool bOnDiscription, std::string strFrameName, double dLeafSize, double dXMax, double dXMin, double dYMax, double dYMin, double dZMax, double dZMin);
 
 	virtual ~Preprocess();
 
@@ -17,6 +17,7 @@ public:
 	inline pPointCloudXYZ GetPreprocessCloud(void) { pPointCloudXYZ pPointCloud(new PointCloudXYZ(m_preprocessCloud)); return pPointCloud;}
 private:
     // Param
+    bool m_bOnDiscription;
     std::string m_strFrameName;
     double m_dLeafSize_m;
     double m_dXMax;

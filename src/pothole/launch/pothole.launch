@@ -1,4 +1,5 @@
 <launch>
+	<arg name="on_decription" default="true" />
 	<arg name="fixed_frame_name" default="rslidar" />
 	<arg name="voxel_leafsize" default="0.10"/>
 	<arg name="x_max" default="3.0"/>
@@ -9,7 +10,6 @@
 	<arg name="z_min" default="-3.0"/>
 
 	<!-- <arg name="dataset_path" default="/home/yeongsoo/HostWorkspace/pt_ws/pothole_pro/dataset/2011_09_26_drive_0002_sync/oxts/data" />
-	<arg name="threshold_range" default="18.0" />
 	<arg name="min_travle_distacne" default="1.0" />
 	<arg name="add_threshold" default="1.0" />
 	<arg name="ndt_epsilon" default="0.01" />
@@ -20,6 +20,7 @@
 	<arg name="threshold_low" default="-100" /> -->
 
 	<node pkg="pothole" type="pothole" name="pothole" args="input:=/rslidar_points" output="screen">
+		<param name="on_decription" value="$(arg on_decription)"/>
 		<param name="fixed_frame_name" value="$(arg fixed_frame_name)"/>
 		<param name="voxel_leafsize" value="$(arg voxel_leafsize)"/>
 		<param name="x_max" value="$(arg x_max)"/>
@@ -30,7 +31,6 @@
 		<param name="z_min" value="$(arg z_min)"/>
 
 		<!-- <param name="dataset_path" value="$(arg dataset_path)"/>
-		<param name="threshold_range" value="$(arg threshold_range)"/>
 		<param name="min_travle_distacne" value="$(arg min_travle_distacne)"/>
 		<param name="add_threshold" value="$(arg add_threshold)"/>
 		<param name="ndt_epsilon" value="$(arg ndt_epsilon)"/>

@@ -1,6 +1,7 @@
 #include "preprocess.hpp"
 
-Preprocess::Preprocess(std::string strFrameName, double dLeafSize, double dXMax, double dXMin, double dYMax, double dYMin, double dZMax, double dZMin) : 
+Preprocess::Preprocess(bool bOnDiscription, std::string strFrameName, double dLeafSize, double dXMax, double dXMin, double dYMax, double dYMin, double dZMax, double dZMin) : 
+m_bOnDiscription(bOnDiscription),
 m_strFrameName(strFrameName), 
 m_dLeafSize_m(dLeafSize),
 m_dXMax(dXMax),
@@ -26,6 +27,10 @@ bool Preprocess::run(cpPointCloudXYZ& pInputCloud)
 	// Voxelization
 	pPointCloudXYZ pDownsampledCloud (new PointCloudXYZ);
 	Voxelization (pPassthroughCloud, pDownsampledCloud);
+	if (m_bOnDiscription){
+		std::cout << "Original: " << pPassthroughCloud->points.size() << " points." << std::endl;
+		std::cout << "Filtered: " << pDownsampledCloud->points.size() << " points." << std::endl;
+	}
 	if (pDownsampledCloud->empty()) return false;
 
 	SetPreprocessCloud(pDownsampledCloud);
@@ -39,10 +44,10 @@ bool Preprocess::PassThrough(cpPointCloudXYZ& pInputCloud,pPointCloudXYZ& pOutpu
 	passFilter.setInputCloud (pInputCloud);
 	// passFilter.setFilterFieldName("x");
 	// passFilter.setFilterLimits (m_dXMin, m_dXMax); 	
-	passFilter.setFilterFieldName("y");
-	passFilter.setFilterLimits (-3.0, 3.0);
 	// passFilter.setFilterFieldName("z");
 	// passFilter.setFilterLimits (m_dZMin, m_dZMax);
+	passFilter.setFilterFieldName("y");
+	passFilter.setFilterLimits (m_dXMin, m_dXMax); 	
 	passFilter.filter (*pOutputCloud);	
 
 	return true;
