@@ -128,6 +128,7 @@ bool RANSAC::FilterGround(cpPointCloudXYZI& p_input_cloud, double d_distance, in
     extract.filter(*p_ground_cloud);
 	if (p_ground_cloud->empty()) return false;
 
+    SetCoefficient(p_coefficients);
     SetGroundCloud(p_ground_cloud);
     SetNoGroundCloud(p_landscape_cloud);
     return true;

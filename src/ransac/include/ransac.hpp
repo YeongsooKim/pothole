@@ -80,6 +80,10 @@ private:
 	PointCloudXYZI m_passthrough_cloud;
 	PointCloudXYZI m_ground_cloud;
 	PointCloudXYZI m_no_ground_cloud;
+
+    // Coefficient
+    pcl::ModelCoefficients m_coefficients;
+
 public:
 	RANSAC();
 	virtual ~RANSAC();
@@ -90,10 +94,12 @@ public:
     inline void SetPassTroughCloud(pPointCloudXYZI p_point_cloud) { m_passthrough_cloud = *p_point_cloud;}
     inline void SetGroundCloud(pPointCloudXYZI p_point_cloud) { m_ground_cloud = *p_point_cloud;}
     inline void SetNoGroundCloud(pPointCloudXYZI p_point_cloud) { m_no_ground_cloud = *p_point_cloud;}
+    inline void SetCoefficient(pcl::ModelCoefficients::Ptr p_coef) { m_coefficients = *p_coef;}
 	inline pPointCloudXYZI GetInputCloud(void) { pPointCloudXYZI p_point_cloud(new PointCloudXYZI(m_input_cloud)); return p_point_cloud;}
 	inline pPointCloudXYZI GetPassTroughCloud(void) { pPointCloudXYZI p_point_cloud(new PointCloudXYZI(m_passthrough_cloud)); return p_point_cloud;}
 	inline pPointCloudXYZI GetGroundCloud(void) { pPointCloudXYZI p_point_cloud(new PointCloudXYZI(m_ground_cloud)); return p_point_cloud;}
 	inline pPointCloudXYZI GetNoGroundCloud(void) { pPointCloudXYZI p_point_cloud(new PointCloudXYZI(m_no_ground_cloud)); return p_point_cloud;}
+	inline pcl::ModelCoefficients::Ptr GetCoefficient(void) { pcl::ModelCoefficients::Ptr p_coef(new pcl::ModelCoefficients(m_coefficients)); return p_coef;}
 
 private:
     // Common function 
