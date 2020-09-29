@@ -40,18 +40,22 @@ void RANSAC::SetParam(void)
 void RANSAC::PointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& p_input_cloud)
 {
     if (!ConvertMsg2Cloud(p_input_cloud)) ROS_ERROR_STREAM("Failed Convert Message to PointCloud");
-    else if (!PassThrough(GetInputCloud(), FILTER_Z)) ROS_ERROR_STREAM("Failed pass through filter");
-    else if (!PassThrough(GetPassTroughCloud(), FILTER_Y)) ROS_ERROR_STREAM("Failed pass through filter");
+    else if (!PassThrough(GetInputCloud(), FILTER_Z)) ROS_ERROR_STREAM("Failed x pass through filter");
+    else if (!PassThrough(GetPassTroughCloud(), FILTER_Y)) ROS_ERROR_STREAM("Failed y pass through filter");
     else if (!FilterGround(GetPassTroughCloud(), m_d_distance_m, m_i_iteration)) ROS_ERROR_STREAM("Failed ransac");
-
-	// Publish
-	Publish();
+    else if (!Publish()) ROS_ERROR_STREAM("Failed publish");
 }
 
-void RANSAC::Publish(void)
+bool RANSAC::Publish(void)
 {
-    m_pub_ground.publish(GetGroundCloud());
-    m_pub_no_ground.publish(GetNoGroundCloud());
+    auto ground = GetGroundCloud();
+    if (ground->empty()) return false;
+    auto no_ground = GetNoGroundCloud();
+    if (no_ground->empty()) return false;
+
+    m_pub_ground.publish(ground);
+    m_pub_no_ground.publish(no_ground);
+    return true;
 }
 
 bool RANSAC::ConvertMsg2Cloud(const sensor_msgs::PointCloud2::ConstPtr& p_input_cloud)

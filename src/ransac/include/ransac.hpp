@@ -98,11 +98,11 @@ public:
 private:
     // Common function 
     void SetParam(void);
-    bool ConvertMsg2Cloud(const sensor_msgs::PointCloud2::ConstPtr& p_input_cloud);        // input pointcloud2 message
     void PointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& p_input_cloud);
-    void Publish(void);
+    bool Publish(void);
 
     // RANSAC function
+    bool ConvertMsg2Cloud(const sensor_msgs::PointCloud2::ConstPtr& p_input_cloud);        // input pointcloud2 message
     bool PassThrough(cpPointCloudXYZI& p_input_cloud, unsigned int type);
     bool FilterGround(cpPointCloudXYZI& p_input_cloud, double d_distance, int i_iter_times = 200);
 };
