@@ -34,7 +34,7 @@
 // }
 
 void RayGroundFilter::publish_cloud(const ros::Publisher& in_publisher,
-    const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_to_publish_ptr,
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_to_publish_ptr,
     const std_msgs::Header& in_header)
 {
   sensor_msgs::PointCloud2 cloud_msg;
@@ -50,10 +50,10 @@ void RayGroundFilter::publish_cloud(const ros::Publisher& in_publisher,
  * @param[out] out_radial_divided_indices Indices of the points in the original cloud for each radial segment
  * @param[out] out_radial_ordered_clouds Vector of Points Clouds, each element will contain the points ordered
  */
-void RayGroundFilter::ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud,
-    PointCloudXYZIRTColor& out_organized_points,
+void RayGroundFilter::ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud,
+    PointCloudXYZRTColor& out_organized_points,
     std::vector<pcl::PointIndices>& out_radial_divided_indices,
-    std::vector<PointCloudXYZIRTColor>& out_radial_ordered_clouds)
+    std::vector<PointCloudXYZRTColor>& out_radial_ordered_clouds)
 {
   out_organized_points.resize(in_cloud->points.size());
   out_radial_divided_indices.clear();
@@ -62,7 +62,7 @@ void RayGroundFilter::ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZI
 
   for(size_t i=0; i< in_cloud->points.size(); i++)
   {
-    PointXYZIRTColor new_point;
+    PointXYZRTColor new_point;
     auto radius         = (float) sqrt(
         in_cloud->points[i].x*in_cloud->points[i].x
         + in_cloud->points[i].y*in_cloud->points[i].y
@@ -97,7 +97,7 @@ void RayGroundFilter::ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZI
   for(size_t i=0; i< radial_dividers_num_; i++)
   {
     std::sort(out_radial_ordered_clouds[i].begin(), out_radial_ordered_clouds[i].end(),
-        [](const PointXYZIRTColor& a, const PointXYZIRTColor& b){ return a.radius < b.radius; });
+        [](const PointXYZRTColor& a, const PointXYZRTColor& b){ return a.radius < b.radius; });
   }
 }
 
@@ -107,7 +107,7 @@ void RayGroundFilter::ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZI
  * @param out_ground_indices Returns the indices of the points classified as ground in the original PointCloud
  * @param out_no_ground_indices Returns the indices of the points classified as not ground in the original PointCloud
  */
-void RayGroundFilter::ClassifyPointCloud(std::vector<PointCloudXYZIRTColor>& in_radial_ordered_clouds,
+void RayGroundFilter::ClassifyPointCloud(std::vector<PointCloudXYZRTColor>& in_radial_ordered_clouds,
     pcl::PointIndices& out_ground_indices,
     pcl::PointIndices& out_no_ground_indices)
 {
@@ -189,11 +189,11 @@ void RayGroundFilter::ClassifyPointCloud(std::vector<PointCloudXYZIRTColor>& in_
  * @param in_clip_height Maximum allowed height in the cloud
  * @param out_clipped_cloud_ptr Resultung PointCloud with the points removed
  */
-void RayGroundFilter::ClipCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
+void RayGroundFilter::ClipCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_ptr,
     double in_clip_height,
-    pcl::PointCloud<pcl::PointXYZI>::Ptr out_clipped_cloud_ptr)
+    pcl::PointCloud<pcl::PointXYZ>::Ptr out_clipped_cloud_ptr)
 {
-  pcl::ExtractIndices<pcl::PointXYZI> extractor;
+  pcl::ExtractIndices<pcl::PointXYZ> extractor;
   extractor.setInputCloud (in_cloud_ptr);
   pcl::PointIndices indices;
 
@@ -218,12 +218,12 @@ void RayGroundFilter::ClipCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cl
  * @param out_only_indices_cloud_ptr Resulting PointCloud with the indices kept
  * @param out_removed_indices_cloud_ptr Resulting PointCloud with the indices removed
  */
-void RayGroundFilter::ExtractPointsIndices(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
+void RayGroundFilter::ExtractPointsIndices(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_ptr,
     const pcl::PointIndices& in_indices,
-    pcl::PointCloud<pcl::PointXYZI>::Ptr out_only_indices_cloud_ptr,
-    pcl::PointCloud<pcl::PointXYZI>::Ptr out_removed_indices_cloud_ptr)
+    pcl::PointCloud<pcl::PointXYZ>::Ptr out_only_indices_cloud_ptr,
+    pcl::PointCloud<pcl::PointXYZ>::Ptr out_removed_indices_cloud_ptr)
 {
-  pcl::ExtractIndices<pcl::PointXYZI> extract_ground;
+  pcl::ExtractIndices<pcl::PointXYZ> extract_ground;
   extract_ground.setInputCloud (in_cloud_ptr);
   extract_ground.setIndices(boost::make_shared<pcl::PointIndices>(in_indices));
 
@@ -240,11 +240,11 @@ void RayGroundFilter::ExtractPointsIndices(const pcl::PointCloud<pcl::PointXYZI>
  * @param in_min_distance Minimum valid distance, points closer than this will be removed.
  * @param out_filtered_cloud_ptr Resulting PointCloud with the invalid points removed.
  */
-void RayGroundFilter::RemovePointsUpTo(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
+void RayGroundFilter::RemovePointsUpTo(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_ptr,
     double in_min_distance,
-    pcl::PointCloud<pcl::PointXYZI>::Ptr out_filtered_cloud_ptr)
+    pcl::PointCloud<pcl::PointXYZ>::Ptr out_filtered_cloud_ptr)
 {
-  pcl::ExtractIndices<pcl::PointXYZI> extractor;
+  pcl::ExtractIndices<pcl::PointXYZ> extractor;
   extractor.setInputCloud (in_cloud_ptr);
   pcl::PointIndices indices;
 
@@ -265,26 +265,27 @@ void RayGroundFilter::RemovePointsUpTo(const pcl::PointCloud<pcl::PointXYZI>::Pt
 
 void RayGroundFilter::CloudCallback(const sensor_msgs::PointCloud2ConstPtr &in_sensor_cloud)
 {
-  pcl::PointCloud<pcl::PointXYZI>::Ptr current_sensor_cloud_ptr(new pcl::PointCloud<pcl::PointXYZI>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr current_sensor_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::fromROSMsg(*in_sensor_cloud, *current_sensor_cloud_ptr);
+  // ROS_INFO_STREAM(in_sensor_cloud->header.stamp);
 
-  pcl::PointCloud<pcl::PointXYZI>::Ptr clipped_cloud_ptr(new pcl::PointCloud<pcl::PointXYZI>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr clipped_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
 
   //remove points above certain point
   ClipCloud(current_sensor_cloud_ptr, clipping_height_, clipped_cloud_ptr);
 
   //remove closer points than a threshold
-  pcl::PointCloud<pcl::PointXYZI>::Ptr filtered_cloud_ptr(new pcl::PointCloud<pcl::PointXYZI>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr filtered_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
   RemovePointsUpTo(clipped_cloud_ptr, min_point_distance_,filtered_cloud_ptr);
 
   //GetCloud Normals
-  //pcl::PointCloud<pcl::PointXYZINormal>::Ptr cloud_with_normals_ptr (new pcl::PointCloud<pcl::PointXYZINormal>);
+  //pcl::PointCloud<pcl::PointXYZNormal>::Ptr cloud_with_normals_ptr (new pcl::PointCloud<pcl::PointXYZNormal>);
   //GetCloudNormals(current_sensor_cloud_ptr, cloud_with_normals_ptr, 5.0);
 
-  PointCloudXYZIRTColor organized_points;
+  PointCloudXYZRTColor organized_points;
   std::vector<pcl::PointIndices> radial_division_indices;
   std::vector<pcl::PointIndices> closest_indices;
-  std::vector<PointCloudXYZIRTColor> radial_ordered_clouds;
+  std::vector<PointCloudXYZRTColor> radial_ordered_clouds;
 
   radial_dividers_num_ = ceil(360 / radial_divider_angle_);
 
@@ -297,8 +298,8 @@ void RayGroundFilter::CloudCallback(const sensor_msgs::PointCloud2ConstPtr &in_s
 
   ClassifyPointCloud(radial_ordered_clouds, ground_indices, no_ground_indices);
 
-  pcl::PointCloud<pcl::PointXYZI>::Ptr ground_cloud_ptr(new pcl::PointCloud<pcl::PointXYZI>);
-  pcl::PointCloud<pcl::PointXYZI>::Ptr no_ground_cloud_ptr(new pcl::PointCloud<pcl::PointXYZI>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr ground_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr no_ground_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
 
   ExtractPointsIndices(filtered_cloud_ptr, ground_indices, ground_cloud_ptr, no_ground_cloud_ptr);
 

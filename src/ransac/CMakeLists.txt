@@ -1,18 +1,21 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(ndt)
+cmake_minimum_required(VERSION 3.0.2)
+project(ransac)
 
-## Compile as C++14, supported in ROS Kinetic and newer
- add_compile_options(-std=c++14)
+## Compile as C++11, supported in ROS Kinetic and newer
+# add_compile_options(-std=c++11)
 
-find_package(brain_msgs REQUIRED)
-
+## Find catkin macros and libraries
+## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  brain_msgs
   pcl_conversions
   pcl_ros
   roscpp
   sensor_msgs
-  brain_msgs
 )
+
+find_package(PCL 1.7 REQUIRED)
 
 ###################################
 ## catkin specific configuration ##
@@ -25,8 +28,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ndt
-  CATKIN_DEPENDS brain_msgs
+  LIBRARIES ransac
+  CATKIN_DEPENDS brain_msgs pcl_conversions pcl_ros roscpp sensor_msgs
 #  DEPENDS system_lib
 )
 
@@ -34,26 +37,18 @@ catkin_package(
 ## Build ##
 ###########
 
- find_package(OpenCV REQUIRED)
- find_package(PCL 1.7 REQUIRED)
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
-  ${brain_msgs_INCLUDE_DIRS}
+# include
   ${catkin_INCLUDE_DIRS}
 )
-
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME} 
-	src/ndt.cpp
+add_executable(${PROJECT_NAME}
+	src/ransac_node.cpp
 	src/main.cpp
 	)
 

@@ -10,3 +10,7 @@ logs/
 src/pothole/.vscode/
 
 *.swp
+
+.vscode/
+
+README.md

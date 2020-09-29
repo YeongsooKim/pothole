@@ -25,12 +25,15 @@
     <arg name="reclass_distance_threshold" default="0.2" /><!-- Distance between points at which re classification will occur (default 0.2 meters)-->
     <arg name="no_ground_point_topic" default="/points_no_ground" />
     <arg name="ground_point_topic" default="/points_ground" />
+
     <!-- ndt -->
+    <arg name="use_ndt" default="true" />
 	
     <node type="rviz" name="rviz" pkg="rviz" args="-d $(find pothole)/rviz/pothole.rviz" />
     
 	<node pkg="ndt" type="ndt" name="ndt" args="input:=/points_no_ground" output="screen">
 		<param name="on_decription" value="$(arg on_decription)"/>
+		<param name="use_ndt" value="$(arg use_ndt)"/>
 		<param name="fixed_frame_name" value="$(arg fixed_frame_name)"/>
 		<param name="voxel_leafsize" value="$(arg voxel_leafsize)"/>
 	</node>

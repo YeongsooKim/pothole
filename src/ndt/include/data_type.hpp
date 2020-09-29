@@ -13,6 +13,8 @@
 
 #include <tf/tf.h>
 
+#include "brain_msgs/VehicleState.h"
+
 #include "Eigen/Dense"
 
 // #include <nav_msgs/Odometry.h>

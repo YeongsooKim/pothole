@@ -68,9 +68,9 @@ private:
 	std::vector<cv::Scalar> colors_;
 	const size_t        color_num_ = 60;//different number of color to generate
 
-	struct PointXYZIRTColor
+	struct PointXYZRTColor
 	{
-		pcl::PointXYZI point;
+		pcl::PointXYZ point;
 
 		float radius;       //cylindric coords on XY Plane
 		float theta;        //angle deg on XY plane
@@ -84,12 +84,12 @@ private:
 
 		size_t original_index; //index of this point in the source pointcloud
 	};
-	typedef std::vector<PointXYZIRTColor> PointCloudXYZIRTColor;
+	typedef std::vector<PointXYZRTColor> PointCloudXYZRTColor;
 
 	// void update_config_params(const autoware_config_msgs::ConfigRayGroundFilter::ConstPtr& param);
 
 	void publish_cloud(const ros::Publisher& in_publisher,
-	                         const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_to_publish_ptr,
+	                         const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_to_publish_ptr,
 	                         const std_msgs::Header& in_header);
 	
 	/*!
@@ -99,10 +99,10 @@ private:
 	 * @param[out] out_radial_divided_indices Indices of the points in the original cloud for each radial segment
 	 * @param[out] out_radial_ordered_clouds Vector of Points Clouds, each element will contain the points ordered
 	 */
-	void ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud,
-	                           PointCloudXYZIRTColor& out_organized_points,
+	void ConvertXYZIToRTZColor(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud,
+	                           PointCloudXYZRTColor& out_organized_points,
 	                           std::vector<pcl::PointIndices>& out_radial_divided_indices,
-	                           std::vector<PointCloudXYZIRTColor>& out_radial_ordered_clouds);
+	                           std::vector<PointCloudXYZRTColor>& out_radial_ordered_clouds);
 
 
 	/*!
@@ -111,7 +111,7 @@ private:
 	 * @param out_ground_indices Returns the indices of the points classified as ground in the original PointCloud
 	 * @param out_no_ground_indices Returns the indices of the points classified as not ground in the original PointCloud
 	 */
-	void ClassifyPointCloud(std::vector<PointCloudXYZIRTColor>& in_radial_ordered_clouds,
+	void ClassifyPointCloud(std::vector<PointCloudXYZRTColor>& in_radial_ordered_clouds,
 	                        pcl::PointIndices& out_ground_indices,
 	                        pcl::PointIndices& out_no_ground_indices);
 	
@@ -122,9 +122,9 @@ private:
 	 * @param in_clip_height Maximum allowed height in the cloud
 	 * @param out_clipped_cloud_ptr Resultung PointCloud with the points removed
 	 */
-	void ClipCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
+	void ClipCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_ptr,
 	               double in_clip_height,
-	               pcl::PointCloud<pcl::PointXYZI>::Ptr out_clipped_cloud_ptr);
+	               pcl::PointCloud<pcl::PointXYZ>::Ptr out_clipped_cloud_ptr);
 	
 
 	/*!
@@ -135,10 +135,10 @@ private:
 	 * @param out_only_indices_cloud_ptr Resulting PointCloud with the indices kept
 	 * @param out_removed_indices_cloud_ptr Resulting PointCloud with the indices removed
 	 */
-	void ExtractPointsIndices(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
+	void ExtractPointsIndices(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_ptr,
 	                          const pcl::PointIndices& in_indices,
-	                          pcl::PointCloud<pcl::PointXYZI>::Ptr out_only_indices_cloud_ptr,
-	                          pcl::PointCloud<pcl::PointXYZI>::Ptr out_removed_indices_cloud_ptr);
+	                          pcl::PointCloud<pcl::PointXYZ>::Ptr out_only_indices_cloud_ptr,
+	                          pcl::PointCloud<pcl::PointXYZ>::Ptr out_removed_indices_cloud_ptr);
 	
 	/*!
 	 * Removes points up to a certain distance in the XY Plane
@@ -146,9 +146,9 @@ private:
 	 * @param in_min_distance Minimum valid distance, points closer than this will be removed.
 	 * @param out_filtered_cloud_ptr Resulting PointCloud with the invalid points removed.
 	 */
-	void RemovePointsUpTo(const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
+	void RemovePointsUpTo(const pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud_ptr,
 	                      double in_min_distance,
-	                      pcl::PointCloud<pcl::PointXYZI>::Ptr out_filtered_cloud_ptr);
+	                      pcl::PointCloud<pcl::PointXYZ>::Ptr out_filtered_cloud_ptr);
 	
 	void CloudCallback(const sensor_msgs::PointCloud2ConstPtr &in_sensor_cloud);
 	

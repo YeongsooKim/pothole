@@ -11,8 +11,8 @@ public:
 
     void Run();
 
-    inline void SetPreprocessCloud(pPointCloudXYZ pPointCloud) { m_preprocessCloud.swap(*pPointCloud);}
-    inline void SetRawCloud(pPointCloudXYZ pPointCloud) { m_rawCloud.swap(*pPointCloud);}
+    inline void SetPreprocessCloud(pPointCloudXYZ pPointCloud) { m_preprocessCloud = *pPointCloud;}
+    inline void SetRawCloud(pPointCloudXYZ pPointCloud) { m_rawCloud = *pPointCloud;}
 	inline pPointCloudXYZ GetPreprocessCloud(void) { pPointCloudXYZ pPointCloud(new PointCloudXYZ(m_preprocessCloud)); return pPointCloud;}
 	inline pPointCloudXYZ GetRawCloud(void) { pPointCloudXYZ pPointCloud(new PointCloudXYZ(m_rawCloud)); return pPointCloud;}
 private:

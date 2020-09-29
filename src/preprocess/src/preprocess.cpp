@@ -10,8 +10,8 @@ Preprocess::Preprocess()
     m_pubRawCloud = m_nodeHandler.advertise<sensor_msgs::PointCloud2>("/pothole/raw_cloud", 1000);
 
     SetParam();
-	m_preprocessCloud.header.frame_id = m_strFrameName;
-	m_rawCloud.header.frame_id = m_strFrameName;
+	// m_rawCloud.header.frame_id = m_strFrameName;
+	// m_preprocessCloud.header.frame_id = m_strFrameName;
 }
 Preprocess::~Preprocess()
 {
@@ -46,31 +46,29 @@ void Preprocess::VelodyneCallback(const sensor_msgs::PointCloud2::ConstPtr& pInp
 	pcl::fromROSMsg(*pInput, tmpCloud);
 	pPointCloudXYZ pTmpCloud (new PointCloudXYZ(tmpCloud));
 	SetRawCloud(pTmpCloud);
-	// pcl::fromROSMsg(*pInput, *GetRawCloud());
 
     // Thresholding
 	pPointCloudXYZ pPassthroughCloud (new PointCloudXYZ);
 	if (!PassThrough(GetRawCloud(), pPassthroughCloud)) ROS_ERROR_STREAM("Fail Pass Through");
 	// if (!PassThrough(pTmpCloud, pPassthroughCloud)) ROS_ERROR_STREAM("Fail Pass Through");
 
-	// Voxelization
-	pPointCloudXYZ pDownsampledCloud (new PointCloudXYZ);
-	if (!Voxelization (pPassthroughCloud, pDownsampledCloud))ROS_ERROR_STREAM("Fail Voxel Grid Filter");
-	if (m_bOnDiscription){
-		std::cout << "Original: " << pPassthroughCloud->points.size() << " points." << std::endl;
-		std::cout << "Filtered: " << pDownsampledCloud->points.size() << " points." << std::endl;
-	}
+	// // Voxelization
+	// pPointCloudXYZ pDownsampledCloud (new PointCloudXYZ);
+	// if (!Voxelization (pPassthroughCloud, pDownsampledCloud))ROS_ERROR_STREAM("Fail Voxel Grid Filter");
+	// if (m_bOnDiscription){
+	// 	std::cout << "Original: " << pPassthroughCloud->points.size() << " points." << std::endl;
+	// 	std::cout << "Filtered: " << pDownsampledCloud->points.size() << " points." << std::endl;
+	// }
 
 	// Publish
 	Publish();
-
-	SetPreprocessCloud(pDownsampledCloud);
+	SetPreprocessCloud(pPassthroughCloud);
 }
 
 void Preprocess::Publish(void)
 {
     m_pubPreprocessCloud.publish(GetPreprocessCloud());
-	m_pubRawCloud.publish(GetRawCloud());
+	// m_pubRawCloud.publish(GetRawCloud());
 }
 
 bool Preprocess::PassThrough(cpPointCloudXYZ& pInputCloud,pPointCloudXYZ& pOutputCloud)
