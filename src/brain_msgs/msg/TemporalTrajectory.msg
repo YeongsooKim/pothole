@@ -1,0 +1,1 @@
+brain_msgs/TemporalTrajectoryPoint[] point

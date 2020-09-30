@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ros/kinetic/include",
+                "/usr/include",
+                "${workspaceFolder}/include",
+                "/usr/include/pcl-1.7",
+                "/usr/include/eigen3",
+                "/usr/include/vtk-6.2",
+                "/home/yeongsoo/HostWorkspace/pt_ws/pothole_pro/src/ray_ground_filter/",
+                "/opt/ros/kinetic/include/opencv-3.3.1-dev"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

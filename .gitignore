@@ -1,0 +1,16 @@
+
+.catkin_tools/
+
+build/
+
+devel/
+
+logs/
+
+src/pothole/.vscode/
+
+*.swp
+
+.vscode/
+
+README.md
